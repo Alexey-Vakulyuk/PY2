@@ -7,11 +7,11 @@ class Book:
 
     # геттеры для атрибутов name и author, которые не позволят их изменять
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     @property
-    def author(self):
+    def author(self) -> str:
         return self._author
 
     def __str__(self) -> str:
@@ -26,14 +26,19 @@ class PaperBook(Book):
 
     def __init__(self, name: str, author: str, pages: int):
         super().__init__(name, author)  # наследование значений атрибутов name и author из базового класса
-        # проверка на тип данных и значение атрибута pages, и присвоение ему значения
-        if isinstance(pages, int):
-            if pages > 0:
-                self.pages = pages
-            else:
-                raise ValueError("Количество страниц должно быть больше 0")
-        else:
-            raise TypeError(f"Количество страниц должно быть целым числом, а не {type(pages)}")
+        self.pages = pages
+
+    @property
+    def pages(self) -> int:
+        return self._pages
+
+    @pages.setter
+    def pages(self, new_pages: int) -> None:
+        if not isinstance(new_pages, int):
+            raise TypeError(f"Количество страниц должно быть целым числом, а не {type(new_pages)}")
+        if new_pages <= 0:
+            raise ValueError("Количество страниц должно быть больше 0")
+        self._pages = new_pages
 
     def __str__(self) -> str:
         return f"{super().__str__()}. Количество страниц {self.pages}"
@@ -47,14 +52,19 @@ class AudioBook(Book):
 
     def __init__(self, name: str, author: str, duration: float):
         super().__init__(name, author)  # наследование значений атрибутов name и author из базового класса
-        # проверка на тип данных и значение атрибута duration, и присвоение ему значения
-        if isinstance(duration, (float, int)):
-            if duration > 0:
-                self.duration = duration
-            else:
-                raise ValueError("Продолжительность книги должна быть больше 0")
-        else:
-            raise TypeError(f"Продолжительность книги должна быть числом с плавающей запятой, а не {type(duration)}")
+        self.duration = duration
+
+    @property
+    def duration(self) -> float:
+        return self._duration
+
+    @duration.setter
+    def duration(self, new_duration: float) -> None:
+        if not isinstance(new_duration, (int, float)):
+            raise TypeError(f"Продолжительность книги должна быть числом, а не {type(new_duration)}")
+        if new_duration <= 0:
+            raise ValueError("Продолжительность книги должна быть больше 0")
+        self._duration = new_duration
 
     def __str__(self) -> str:
         return f"Книга {self.name}. Автор {self.author}. Продолжительность книги {self.duration}"
